@@ -9,6 +9,11 @@
     @include('components.head')
 </head>
 <body>
+    {{-- Page content --}}
+    @include('components.menu')
+
+    {{-- Page Navbar --}}
+    @include('components.navbar')
 
     {{-- Page content --}}
     @yield('content')

@@ -1,8 +1,23 @@
-@extends('layouts.app')
+<!doctype html>
+<html
+  lang="en"
+  class="light-style layout-wide customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../../assets/"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Login</title>
 
-@section('title', 'Login')
+    <meta name="description" content="" />
 
-@section('content')
+    @include('components.head')
+  </head>
+  <body>
     <!-- Content -->
         <div class="authentication-wrapper authentication-cover">
         <div class="authentication-inner row m-0">
@@ -136,4 +151,6 @@
         </div>
         </div>
     <!-- / Content -->
-@endsection
+  </body>
+      @include('components.scripts')
+</html>
