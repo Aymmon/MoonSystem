@@ -29,3 +29,5 @@ Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->n
 
 use App\Http\Controllers\PosController;
 Route::get('/pos', [PosController::class, 'posList'])->name('pos.list');
+Route::post('/add-to-cart', [PosController::class, 'addToCart'])->name('pos.addToCart');
+Route::post('/remove-from-cart', [PosController::class, 'removeFromCart'])->name('pos.removeFromCart');
