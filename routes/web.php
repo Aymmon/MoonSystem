@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'index']) ->middleware('auth') ->name('dashboard');
 
 use App\Http\Controllers\AuthController;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -19,7 +22,6 @@ Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.de
 Route::get('/users/{user}', [UserController::class, 'profile'])->name('user.profile');
 
 Route::get('/profile', [UserController::class, 'profile'])->middleware('auth');
-Route::get('/dashboard', function () { return view('dashboard'); })->middleware('auth')->name('dashboard');
 
 use App\Http\Controllers\ProductController;
 Route::get('/product', [ProductController::class, 'productList'])->name('product.list');
@@ -30,4 +32,9 @@ Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->n
 use App\Http\Controllers\PosController;
 Route::get('/pos', [PosController::class, 'posList'])->name('pos.list');
 Route::post('/add-to-cart', [PosController::class, 'addToCart'])->name('pos.addToCart');
+Route::post('/pos/update-cart', [PosController::class, 'updateCart'])->name('pos.updateCart');
 Route::post('/remove-from-cart', [PosController::class, 'removeFromCart'])->name('pos.removeFromCart');
+Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
+
+use App\Http\Controllers\OrderController;
+Route::get('/order', [OrderController::class, 'orderList'])->name('order.list');

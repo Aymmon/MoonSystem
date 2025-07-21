@@ -79,17 +79,10 @@ id="layout-navbar">
             <div class="row row-bordered overflow-visible g-0">
             <div class="dropdown-shortcuts-item col">
                 <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                <i class="bx bx-calendar fs-4"></i>
-                </span>
-                <a href="app-calendar.html" class="stretched-link">Calendar</a>
-                <small class="text-muted mb-0">Appointments</small>
-            </div>
-            <div class="dropdown-shortcuts-item col">
-                <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                 <i class="bx bx-food-menu fs-4"></i>
                 </span>
-                <a href="app-invoice-list.html" class="stretched-link">Invoice App</a>
-                <small class="text-muted mb-0">Manage Accounts</small>
+                <a href="{{ route('pos.list') }}" class="stretched-link">POS App</a>
+                <small class="text-muted mb-0">POS Transactions</small>
             </div>
             </div>
             <div class="row row-bordered overflow-visible g-0">
