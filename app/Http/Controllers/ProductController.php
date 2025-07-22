@@ -1,16 +1,18 @@
 <?php
-
 namespace App\Http\Controllers;
+
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+
 class ProductController extends Controller
 {
     public function productList()
     {
-        $products = Product::all(); // Or use pagination: Product::paginate(10)
-        return view('inventory.product', compact('products'));
+        $products = Product::with('category')->get(); // eager load category
+        $categories = Category::all();
+        return view('inventory.product', compact('products', 'categories'));
     }
 
     public function store(Request $request)
@@ -18,15 +20,14 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['name', 'description', 'price', 'category_id']);
 
         if ($request->hasFile('picture')) {
-            $path = $request->file('picture')->store('products', 'public');
-            $data['picture'] = $path;
+            $data['picture'] = $request->file('picture')->store('products', 'public');
         }
 
         Product::create($data);
@@ -39,21 +40,18 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            'picture' => 'nullable|image|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
-        $data = $request->all();
+        $data = $request->only(['name', 'description', 'price', 'category_id']);
 
         if ($request->hasFile('picture')) {
-            // Delete old image if exists
             if ($product->picture) {
                 Storage::disk('public')->delete($product->picture);
             }
-            $path = $request->file('picture')->store('products', 'public');
-            $data['picture'] = $path;
+            $data['picture'] = $request->file('picture')->store('products', 'public');
         }
 
         $product->update($data);
@@ -64,9 +62,11 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        if ($product->picture) {
+            Storage::disk('public')->delete($product->picture);
+        }
         $product->delete();
 
         return redirect()->back()->with('success', 'Product deleted successfully.');
     }
-
 }

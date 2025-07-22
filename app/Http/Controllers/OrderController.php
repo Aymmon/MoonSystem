@@ -17,16 +17,12 @@ class OrderController extends Controller
         $todaySalesTotal = PosTransaction::whereDate('transaction_date', $today)
             ->sum('total_amount');
 
-        // Items sold today
-        $soldItems = PosTransactionItem::select('product_id', DB::raw('SUM(quantity) as total_quantity'), DB::raw('SUM(subtotal) as total_sales'))
-            ->whereHas('transaction', function ($q) use ($today) {
-                $q->whereDate('transaction_date', $today);
-            })
-            ->groupBy('product_id')
-            ->with('product')
+        // Transactions made today (1 row per transaction)
+        $transactions = PosTransaction::with('items.product')
+            ->whereDate('transaction_date', $today)
             ->get();
 
-
-        return view('order.order-list', compact('todaySalesTotal', 'soldItems'));
+        return view('order.order-list', compact('todaySalesTotal', 'transactions'));
     }
+
 }

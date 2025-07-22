@@ -38,3 +38,9 @@ Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.chec
 
 use App\Http\Controllers\OrderController;
 Route::get('/order', [OrderController::class, 'orderList'])->name('order.list');
+
+use App\Http\Controllers\CategoryController;
+Route::get('/categories/list', [CategoryController::class, 'categoryList'])->name('categories.list');
+Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');

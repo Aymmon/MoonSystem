@@ -41,12 +41,12 @@
                     <div class="card-body">
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
-                          <span>Total Sales Today</span>
+                          <span>Total Sales</span>
                           <div class="d-flex align-items-end mt-2">
                             <h4 class="mb-0 me-2">₱{{ number_format($todaySalesTotal, 2) }}</h4>
                             <small class="text-success">(+29%)</small>
                           </div>
-                          <p class="mb-0">Total Users</p>
+                          <p class="mb-0">Today Sales</p>
                         </div>
                         <div class="avatar">
                           <span class="avatar-initial rounded bg-label-primary">
@@ -121,6 +121,7 @@
                   </div>
                 </div>
               </div>
+
               <!-- Users List Table -->
               <div class="card">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -128,25 +129,36 @@
                 </div>
                 <div class="card-datatable table-responsive">
                     <table class="datatables table border-top">
-                        <thead class="table-light">
-                        <tr>
-                            <th>Product Name</th>
-                            <th class="text-center">Quantity Sold</th>
-                            <th class="text-end">Total Sales (₱)</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Transaction #</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Transaction Date</th>
+                                <th>Items</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach($soldItems as $item)
-                        <tr>
-                            <td>{{ $item->product->name ?? 'N/A' }}</td>
-                            <td class="text-center">{{ $item->total_quantity }}</td>
-                            <td class="text-end">₱{{ number_format($item->total_sales, 2) }}</td>
-                        </tr>
-                        @endforeach
+                            @foreach ($transactions as $transaction)
+                                <tr>
+                                    <td>{{ $transaction->transaction_number }}</td>
+                                    <td>{{ number_format($transaction->total_amount, 2) }}</td>
+                                    <td>{{ $transaction->status }}</td>
+                                    <td>{{ $transaction->transaction_date }}</td>
+                                    <td>
+                                        <ul>
+                                            @foreach ($transaction->items as $item)
+                                                <li>{{ $item->product->name ?? 'N/A' }} x{{ $item->quantity }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
               </div>
+
             </div>
             <!-- / Content -->
 

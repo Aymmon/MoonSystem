@@ -62,9 +62,9 @@
                 <div class="text-truncate" data-i18n="Add Product">Add Product</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="app-ecommerce-category-list.html" class="menu-link">
-                <div class="text-truncate" data-i18n="Category List">Category List</div>
+            <li class="menu-item {{ request()->routeIs('categories.list') ? 'active' : '' }}">
+                <a href="{{ route('categories.list') }}" class="menu-link">
+                    <div class="text-truncate" data-i18n="Category List">Category List</div>
                 </a>
             </li>
             </ul>

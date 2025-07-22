@@ -148,7 +148,7 @@
                             </td>
                             <td>{{ $product->name }}</td>
                             <td>{{ $product->description }}</td>
-                            <td>{{ $product->category }}</td>
+                            <td>{{ $product->category->name ?? 'No Category' }}</td>
                             <td>₱{{ number_format($product->price, 2) }}</td>
                             <td>
                                 <!-- Edit Button -->
@@ -194,7 +194,12 @@
 
                             <div class="mb-3">
                                 <label for="category" class="form-label">Category</label>
-                                <input type="text" name="category" class="form-control" required>
+                                <select name="category_id" class="form-select" required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="mb-3">
@@ -239,7 +244,13 @@
                                 </div>
                                 <div class="mb-3">
                                     <label>Category</label>
-                                    <input type="text" name="category" value="{{ $product->category }}" class="form-control" required>
+                                    <select name="category_id" class="form-select" required>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label>Price</label>
