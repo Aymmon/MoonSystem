@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="card-datatable table-responsive">
-                        <table class="datatables-products table border-top">
+                        <table class="datatables table border-top">
                         <thead>
                             <tr>
                             <th>Picture</th>
@@ -286,5 +286,14 @@
     </div>
     <!-- / Layout wrapper -->
     @include('components.scripts')
+    <script>
+        $(document).ready(function () {
+            $('.datatables').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": false
+            });
+        });
+    </script>
   </body>
 </html>

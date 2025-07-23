@@ -21,12 +21,13 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|max:255|unique:users',
             'password' => 'required|min:6',
             'usertype' => 'required|string',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $data = $request->only(['name', 'email', 'usertype']);
+        $data = $request->only(['name', 'email', 'username', 'usertype']);
         $data['password'] = Hash::make($request->password);
 
         if ($request->hasFile('profile_picture')) {
@@ -35,9 +36,9 @@ class UserController extends Controller
 
         User::create($data);
 
-        // Redirect back to the user list with a flash success message
         return redirect()->route('user-list')->with('success', 'User added successfully!');
     }
+
 
     public function update(Request $request, $id)
     {
@@ -46,6 +47,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'usertype' => 'required|string',
             'password' => 'nullable|min:6',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',

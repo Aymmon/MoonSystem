@@ -252,5 +252,14 @@
     </div>
     <!-- / Layout wrapper -->
     @include('components.scripts')
+    <script>
+        $(document).ready(function () {
+            $('.datatables').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": false
+            });
+        });
+    </script>
   </body>
 </html>

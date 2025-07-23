@@ -25,6 +25,6 @@ class PosTransactionItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class); // Make sure your product model is named correctly
+        return $this->belongsTo(Product::class);
     }
 }

@@ -9,47 +9,7 @@ id="layout-navbar">
 </div>
 
 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-    <!-- Search -->
-    <div class="navbar-nav align-items-center">
-    <div class="nav-item navbar-search-wrapper mb-0">
-        <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
-        <i class="bx bx-search bx-sm"></i>
-        <span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
-        </a>
-    </div>
-    </div>
-    <!-- /Search -->
-
     <ul class="navbar-nav flex-row align-items-center ms-auto">
-    <!-- Language -->
-    <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
-        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-        <i class="bx bx-globe bx-sm"></i>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end">
-        <li>
-            <a class="dropdown-item" href="javascript:void(0);" data-language="en" data-text-direction="ltr">
-            <span class="align-middle">English</span>
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="javascript:void(0);" data-language="fr" data-text-direction="ltr">
-            <span class="align-middle">French</span>
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="javascript:void(0);" data-language="ar" data-text-direction="rtl">
-            <span class="align-middle">Arabic</span>
-            </a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="javascript:void(0);" data-language="de" data-text-direction="ltr">
-            <span class="align-middle">German</span>
-            </a>
-        </li>
-        </ul>
-    </li>
-    <!-- /Language -->
 
     <!-- Quick links  -->
     <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">

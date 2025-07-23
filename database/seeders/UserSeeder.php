@@ -13,11 +13,12 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
+            'username' => 'admin1', // ✅ Added username
             'password' => Hash::make('password123'),
-            'usertype' => 'admin', // optional: if you added this column
-            'profile_picture' => null, // optional
+            'usertype' => 'admin',
+            'profile_picture' => null,
         ]);
 
-        // You can add more users here
+        // Add more users if needed
     }
 }

@@ -29,15 +29,25 @@ Route::post('/product/store', [ProductController::class, 'store'])->name('produc
 Route::put('/products/update/{id}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
+
 use App\Http\Controllers\PosController;
 Route::get('/pos', [PosController::class, 'posList'])->name('pos.list');
 Route::post('/add-to-cart', [PosController::class, 'addToCart'])->name('pos.addToCart');
 Route::post('/pos/update-cart', [PosController::class, 'updateCart'])->name('pos.updateCart');
 Route::post('/remove-from-cart', [PosController::class, 'removeFromCart'])->name('pos.removeFromCart');
 Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.checkout');
+Route::get('/pos/cart-partial', [PosController::class, 'cartPartial'])->name('pos.cartPartial');
+
 
 use App\Http\Controllers\OrderController;
 Route::get('/order', [OrderController::class, 'orderList'])->name('order.list');
+use App\Exports\TransactionsExport;
+use Maatwebsite\Excel\Facades\Excel;
+Route::get('/export-transactions', function () {
+    return Excel::download(new TransactionsExport, 'transactions.xlsx');
+})->name('export.transactions');
+
+
 
 use App\Http\Controllers\CategoryController;
 Route::get('/categories/list', [CategoryController::class, 'categoryList'])->name('categories.list');

@@ -33,8 +33,8 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
-
             <div class="container-xxl flex-grow-1 container-p-y">
+            <!-- Analytics Card -->
               <div class="row g-4 mb-4">
                 <div class="col-sm-6 col-xl-3">
                   <div class="card">
@@ -44,14 +44,14 @@
                           <span>Total Sales</span>
                           <div class="d-flex align-items-end mt-2">
                             <h4 class="mb-0 me-2">₱{{ number_format($todaySalesTotal, 2) }}</h4>
-                            <small class="text-success">(+29%)</small>
+                            <small class="text-success">({{ $totalQuantitySold }} sold)</small>
                           </div>
                           <p class="mb-0">Today Sales</p>
                         </div>
                         <div class="avatar">
-                          <span class="avatar-initial rounded bg-label-primary">
-                            <i class="bx bx-user bx-sm"></i>
-                          </span>
+                        <span class="avatar-initial rounded bg-label-primary">
+                            <i class="bx bx-money bx-sm"></i>
+                        </span>
                         </div>
                       </div>
                     </div>
@@ -62,16 +62,16 @@
                     <div class="card-body">
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
-                          <span>Paid Users</span>
+                          <span>Top-Selling Product</span>
                           <div class="d-flex align-items-end mt-2">
-                            <h4 class="mb-0 me-2">4,567</h4>
-                            <small class="text-success">(+18%)</small>
+                            <h4 class="mb-0 me-2">{{ $topSelling->product_name }}</h4>
+                            <small class="text-success">({{ $topSelling->total_quantity }} sold)</small>
                           </div>
-                          <p class="mb-0">Last week analytics</p>
+                          <p class="mb-0">Today analytics</p>
                         </div>
                         <div class="avatar">
                           <span class="avatar-initial rounded bg-label-danger">
-                            <i class="bx bx-user-check bx-sm"></i>
+                            <i class="bx bx-coffee bx-sm"></i>
                           </span>
                         </div>
                       </div>
@@ -122,12 +122,19 @@
                 </div>
               </div>
 
-              <!-- Users List Table -->
+              <!-- Order List Table -->
               <div class="card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0">Order List</h4>
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title m-0">Order List</h5>
+                    </div>
                 </div>
                 <div class="card-datatable table-responsive">
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ route('export.transactions') }}" class="btn btn-success me-3">
+                        <i class="bx bx-download"></i> Export to Excel
+                        </a>
+                    </div>
                     <table class="datatables table border-top">
                         <thead>
                             <tr>
@@ -135,6 +142,7 @@
                                 <th>Total Amount</th>
                                 <th>Status</th>
                                 <th>Transaction Date</th>
+                                <th>Transaction Time</th>
                                 <th>Items</th>
                             </tr>
                         </thead>
@@ -144,7 +152,8 @@
                                     <td>{{ $transaction->transaction_number }}</td>
                                     <td>{{ number_format($transaction->total_amount, 2) }}</td>
                                     <td>{{ $transaction->status }}</td>
-                                    <td>{{ $transaction->transaction_date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('m-d-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transaction->transaction_date)->format('h:i A') }}</td>
                                     <td>
                                         <ul>
                                             @foreach ($transaction->items as $item)
@@ -158,37 +167,32 @@
                     </table>
                 </div>
               </div>
-
             </div>
             <!-- / Content -->
-
             <!-- Footer -->
             @include('components.footer')
             <!-- / Footer -->
-
             <div class="content-backdrop fade"></div>
           </div>
           <!-- Content wrapper -->
         </div>
         <!-- / Layout page -->
       </div>
-
       <!-- Overlay -->
       <div class="layout-overlay layout-menu-toggle"></div>
-
       <!-- Drag Target Area To SlideIn Menu On Small Screens -->
       <div class="drag-target"></div>
     </div>
     <!-- / Layout wrapper -->
-
     @include('components.scripts')
     <script>
-    $(document).ready(function () {
-        setTimeout(function () {
-            $('.alert-success').fadeOut('slow');
-        }, 2000);
-    });
-</script>
-
+        $(document).ready(function () {
+            $('.datatables').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": false
+            });
+        });
+    </script>
   </body>
 </html>
