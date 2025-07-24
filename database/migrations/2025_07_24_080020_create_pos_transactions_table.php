@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('transaction_number')->unique();
             $table->decimal('total_amount', 10, 2);
+            $table->decimal('received_amount', 10, 2)->nullable();
+            $table->decimal('change_amount', 10, 2)->nullable();
             $table->timestamp('transaction_date')->useCurrent();
-            $table->string('status')->default('completed'); // or 'pending', 'cancelled'
+            $table->enum('status', ['completed', 'cancelled'])->default('completed');
             $table->timestamps();
         });
     }

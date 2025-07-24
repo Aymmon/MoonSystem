@@ -12,6 +12,8 @@ class PosTransaction extends Model
     protected $fillable = [
         'transaction_number',
         'total_amount',
+        'received_amount',
+        'change_amount',
         'transaction_date',
         'status',
     ];

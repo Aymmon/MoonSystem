@@ -110,7 +110,7 @@ box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     padding: 20px;
     border-radius: 0 16px 16px 0;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    color: #f5e8dc;
+    color: #f5e8dc !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -200,6 +200,28 @@ box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     box-shadow: 0 6px 18px rgba(169, 116, 91, 0.9);
     cursor: pointer;
     }
+
+    /* Glassmorphism style for input fields */
+    .glass-input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(111, 78, 55, 0.4);
+    color: #f5e8dc;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1);
+    padding: 6px 10px;
+    transition: background-color 0.3s ease;
+    }
+
+    .glass-input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    outline: none;
+    box-shadow: 0 0 10px rgba(169, 116, 91, 0.7);
+    color: #3e2f23;
+    }
+/* Cart end CSS */
+
 /* Custom Add to Cart Button */
 .btn-custom {
 background: rgba(255, 255, 255, 0.2);
@@ -236,6 +258,12 @@ font-weight: 600;
     border-radius: 6px !important;
     padding: 8px 20px !important;
 }
+.swal2-success-circular-line-left,
+.swal2-success-circular-line-right,
+.swal2-success-fix {
+  display: none !important;
+}
+
 /* Responsive */
 /* Responsive for tablets and smaller screens */
 @media (min-width: 1024px) and (max-width: 1439px) {
@@ -362,10 +390,10 @@ font-weight: 600;
 </style>
 </head>
 <body>
-        {{-- Toggle Button for Mobile --}}
-<button id="toggle-category" class="btn btn-sm btn-outline-light d-md-none" style="position: fixed; top: 8px; left: 8px; z-index: 1100;">
-  ☰ Categories
-</button>
+    {{-- Toggle Button for Mobile --}}
+    <button id="toggle-category" class="btn btn-sm btn-outline-light d-md-none" style="position: fixed; top: 8px; left: 8px; z-index: 1100;">
+    ☰ Categories
+    </button>
   <div class="d-flex h-100">
     {{-- LEFT: Categories --}}
     <div class="category-sidebar col-2">
@@ -405,153 +433,171 @@ font-weight: 600;
 <!-- ✅ Load SweetAlert2 from local path -->
 <script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 
-<!-- Your custom script using Swal -->
 <script>
-  $(document).ready(function () {
-    //sweet alert Jquery
-    $(document).on('click', '#checkout-btn', function () {
-        const $btn = $(this);
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to proceed with checkout?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#28a745',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, checkout',
-        cancelButtonText: 'No, cancel'
-        }).then((result) => {
-        if (result.isConfirmed) {
-            $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...');
-            // AJAX checkout
-            $.ajax({
-            url: $btn.closest('form').attr('action'),
-            method: 'POST',
-            data: $btn.closest('form').serialize(),
-            success: function (res) {
-                // If your controller returns JSON, handle it here
-                Swal.fire('Success!', 'Checkout successful!', 'success');
-                updateCartSidebar(); // Refresh cart
-            },
-            error: function (xhr) {
-                let msg = 'Checkout failed.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                msg = xhr.responseJSON.message;
+    $(document).ready(function () {
+        //sweet alert Jquery
+        $(document).on('click', '#checkout-btn', function (e) {
+            e.preventDefault(); // Prevent default form behavior
+            const $btn = $(this);
+            const $form = $btn.closest('form');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to proceed with checkout?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, checkout',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...');
+                    $.ajax({
+                        url: $form.attr('action'),
+                        method: 'POST',
+                        data: $form.serialize(),
+                        success: function (res) {
+                            Swal.fire('Success!', 'Checkout successful!', 'success');
+                            $form[0].reset();
+                            updateCartSidebar();
+                        },
+                        error: function (xhr) {
+                            let msg = 'Checkout failed.';
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                msg = xhr.responseJSON.message;
+                            }
+                            Swal.fire('Error', msg, 'error');
+                        },
+                        complete: function () {
+                            $btn.prop('disabled', false).html('Checkout');
+                        }
+                    });
                 }
-                Swal.fire('Error', msg, 'error');
+            });
+        });
+
+        $(document).on('click', '.category-link', function (e) {
+        e.preventDefault();
+        const categoryId = $(this).data('id');
+        $.ajax({
+            url: "{{ route('pos.list') }}",
+            type: 'GET',
+            data: {
+            category: categoryId
             },
-            complete: function () {
-                $btn.prop('disabled', false).html('Checkout');
+            success: function (response) {
+            $('#product-list').html($(response).find('#product-list').html());
+            // Optional: highlight selected category
+            $('.category-link').removeClass('active');
+            $(`.category-link[data-id="${categoryId}"]`).addClass('active');
+            },
+            error: function () {
+            alert('Failed to load products.');
+            }
+        });
+        });
+
+        // Add to Cart (adjust selector based on your add button class)
+        $(document).on('click', '.add-to-cart', function (e) {
+            e.preventDefault();
+
+            const productId = $(this).data('id');
+            $.ajax({
+            url: "{{ route('pos.addToCart') }}",
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: productId
+            },
+            success: function (res) {
+                updateCartSidebar(res);
+            },
+            error: function () {
+                alert('Failed to add to cart.');
+            }
+            });
+        });
+
+        // Update Cart Quantity
+        $(document).on('click', '.btn-increase, .btn-decrease', function (e) {
+            e.preventDefault();
+
+            const form = $(this).closest('.update-cart-form');
+            const productId = form.data('id');
+            const action = $(this).data('action');
+
+            $.ajax({
+            url: "{{ route('pos.updateCart') }}",
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: productId,
+                action: action
+            },
+            success: function (res) {
+                updateCartSidebar(res);
+            },
+            error: function () {
+                alert('Failed to update cart.');
+            }
+            });
+        });
+
+        // Remove from Cart
+        $(document).on('click', '.btn-remove', function (e) {
+            e.preventDefault();
+
+            const form = $(this).closest('.remove-from-cart-form');
+            const productId = form.data('id');
+
+            $.ajax({
+            url: "{{ route('pos.removeFromCart') }}",
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: productId
+            },
+            success: function (res) {
+                updateCartSidebar(res);
+            },
+            error: function () {
+                alert('Failed to remove item.');
+            }
+            });
+        });
+
+        // Update cart sidebar HTML
+        function updateCartSidebar(data) {
+            // Build cart HTML dynamically or make an AJAX request to get the partial view HTML
+            // Easiest: make a small endpoint to return the cart partial view and replace #cart-sidebar
+
+            $.ajax({
+            url: "{{ route('pos.cartPartial') }}", // You need to create this route & controller method
+            method: 'GET',
+            success: function (html) {
+                $('#cart-sidebar').html(html);
             }
             });
         }
+
+        // Recieve payment automatic compute Change
+        $(document).on('input', '#received_amount', function () {
+            // Get raw total (unformatted number)
+            const total = parseFloat($('#total-amount-raw').text());
+            const received = parseFloat($(this).val());
+            if (!isNaN(received) && !isNaN(total) && received >= total) {
+                $('#change_amount').val((received - total).toFixed(2));
+            } else {
+                $('#change_amount').val('0.00');
+            }
         });
+        //Payment Button Quick Pay insert
+        $(document).on('click', '.quick-pay-btn', function () {
+            const amount = parseFloat($(this).data('amount'));
+            $('#received_amount').val(amount).trigger('input');
+        });
+
     });
-
-    $(document).on('click', '.category-link', function (e) {
-      e.preventDefault();
-      const categoryId = $(this).data('id');
-      $.ajax({
-        url: "{{ route('pos.list') }}",
-        type: 'GET',
-        data: {
-          category: categoryId
-        },
-        success: function (response) {
-          $('#product-list').html($(response).find('#product-list').html());
-          // Optional: highlight selected category
-          $('.category-link').removeClass('active');
-          $(`.category-link[data-id="${categoryId}"]`).addClass('active');
-        },
-        error: function () {
-          alert('Failed to load products.');
-        }
-      });
-    });
-
-    // Add to Cart (adjust selector based on your add button class)
-  $(document).on('click', '.add-to-cart', function (e) {
-    e.preventDefault();
-
-    const productId = $(this).data('id');
-    $.ajax({
-      url: "{{ route('pos.addToCart') }}",
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}',
-        id: productId
-      },
-      success: function (res) {
-        updateCartSidebar(res);
-      },
-      error: function () {
-        alert('Failed to add to cart.');
-      }
-    });
-  });
-
-  // Update Cart Quantity
-  $(document).on('click', '.btn-increase, .btn-decrease', function (e) {
-    e.preventDefault();
-
-    const form = $(this).closest('.update-cart-form');
-    const productId = form.data('id');
-    const action = $(this).data('action');
-
-    $.ajax({
-      url: "{{ route('pos.updateCart') }}",
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}',
-        id: productId,
-        action: action
-      },
-      success: function (res) {
-        updateCartSidebar(res);
-      },
-      error: function () {
-        alert('Failed to update cart.');
-      }
-    });
-  });
-
-  // Remove from Cart
-  $(document).on('click', '.btn-remove', function (e) {
-    e.preventDefault();
-
-    const form = $(this).closest('.remove-from-cart-form');
-    const productId = form.data('id');
-
-    $.ajax({
-      url: "{{ route('pos.removeFromCart') }}",
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}',
-        id: productId
-      },
-      success: function (res) {
-        updateCartSidebar(res);
-      },
-      error: function () {
-        alert('Failed to remove item.');
-      }
-    });
-  });
-
-  // Update cart sidebar HTML
-  function updateCartSidebar(data) {
-    // Build cart HTML dynamically or make an AJAX request to get the partial view HTML
-    // Easiest: make a small endpoint to return the cart partial view and replace #cart-sidebar
-
-    $.ajax({
-      url: "{{ route('pos.cartPartial') }}", // You need to create this route & controller method
-      method: 'GET',
-      success: function (html) {
-        $('#cart-sidebar').html(html);
-      }
-    });
-  }
-  });
 </script>
 
 </html>

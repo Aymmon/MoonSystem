@@ -39,8 +39,11 @@ Route::post('/pos/checkout', [PosController::class, 'checkout'])->name('pos.chec
 Route::get('/pos/cart-partial', [PosController::class, 'cartPartial'])->name('pos.cartPartial');
 
 
-use App\Http\Controllers\OrderController;
-Route::get('/order', [OrderController::class, 'orderList'])->name('order.list');
+use App\Http\Controllers\TransactionsController;
+Route::get('/transactions', [TransactionsController::class, 'transactionsList'])->name('transactions.list');
+Route::get('/transactions/{id}', [TransactionsController::class, 'show'])->name('transactions.show');
+Route::put('/transactions/{id}/cancel', [TransactionsController::class, 'cancel'])->name('transactions.cancel');
+
 use App\Exports\TransactionsExport;
 use Maatwebsite\Excel\Facades\Excel;
 Route::get('/export-transactions', function () {

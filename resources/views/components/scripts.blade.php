@@ -21,8 +21,9 @@
 <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>   <!-- gamit sa User -->
 <!-- Main JS -->
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<!-- ✅ Load SweetAlert2 from local path -->
+<script src="{{ asset('assets/vendor/libs/sweetalert2/sweetalert2.js') }}"></script>
 <!-- Page JS -->
 <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
 <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script> <!-- gamit sa Dashboard -->
-
 <script src="{{ asset('assets/js/app-user-list.js') }}"></script> <!-- gamit sa User -->

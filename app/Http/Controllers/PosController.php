@@ -119,6 +119,12 @@ class PosController extends Controller
         // Calculate total
         $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
 
+        // Validate received amount
+        $request->validate([
+            'received_amount' => 'required|numeric|min:' . $total,
+            'change_amount' => 'required|numeric',
+        ]);
+
         // Generate transaction number (TRN-0000000001 format)
         $lastTransaction = PosTransaction::latest('id')->first();
         $lastNumber = 0;
@@ -129,11 +135,13 @@ class PosController extends Controller
 
         $newNumber = $lastNumber + 1;
         $transactionNumber = 'TRN-' . str_pad($newNumber, 10, '0', STR_PAD_LEFT);
-
+        
         // Create transaction
         $transaction = PosTransaction::create([
             'transaction_number' => $transactionNumber,
             'total_amount' => $total,
+            'received_amount' => $request->input('received_amount'),
+            'change_amount' => $request->input('change_amount'),
             'transaction_date' => now(),
             'status' => 'completed',
         ]);

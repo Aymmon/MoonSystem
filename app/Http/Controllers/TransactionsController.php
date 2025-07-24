@@ -1,16 +1,14 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\PosTransaction;
-use App\Models\PosTransactionItem;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-class OrderController extends Controller
+class TransactionsController extends Controller
 {
-    public function orderList()
+    public function transactionsList()
     {
+        // All transactions (no date filter)
+        $allTransactions = PosTransaction::with('items.product')->get();
+
         $today = today();
 
         // Today's total sales
@@ -37,7 +35,21 @@ class OrderController extends Controller
             ->groupBy('product_id', 'products.name')
             ->orderByDesc('total_quantity')
             ->first();
-        return view('order.order-list', compact('todaySalesTotal','totalQuantitySold', 'transactions','topSelling'));
+        return view('transactions.transactions-list', compact('todaySalesTotal','totalQuantitySold', 'transactions','topSelling','allTransactions'));
     }
 
+    public function show($id)
+    {
+        $transaction = PosTransaction::with('items.product')->findOrFail($id);
+        return view('transactions.partials.receipt', compact('transaction'))->render();
+    }
+
+    public function cancel($id)
+    {
+        $transaction = PosTransaction::findOrFail($id);
+        $transaction->status = 'cancelled';
+        $transaction->save();
+
+        return redirect()->back()->with('success', 'Transaction cancelled successfully.');
+    }
 }

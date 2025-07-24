@@ -35,7 +35,7 @@
     </li>
 
     <!-- Inventory Menu -->
-    <li class="menu-item {{ request()->routeIs('product.list', 'categories.list', 'order.list') ? 'open' : '' }}">
+    <li class="menu-item {{ request()->routeIs('product.list', 'categories.list', 'transactions.list') ? 'open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-cart-alt"></i>
         <div class="text-truncate" data-i18n="Inventory">Inventory</div>
@@ -60,15 +60,15 @@
           </ul>
         </li>
 
-        <!-- Orders -->
-        <li class="menu-item {{ request()->routeIs('order.list') ? 'open' : '' }}">
+        <!-- Transactions -->
+        <li class="menu-item {{ request()->routeIs('transactions.list') ? 'open' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div class="text-truncate" data-i18n="Order">Order</div>
+            <div class="text-truncate" data-i18n="Transaction">Transaction</div>
           </a>
           <ul class="menu-sub">
-            <li class="menu-item {{ request()->routeIs('order.list') ? 'active' : '' }}">
-              <a href="{{ route('order.list') }}" class="menu-link">
-                <div class="text-truncate" data-i18n="Order List">Order List</div>
+            <li class="menu-item {{ request()->routeIs('transactions.list') ? 'active' : '' }}">
+              <a href="{{ route('transactions.list') }}" class="menu-link">
+                <div class="text-truncate" data-i18n="Transaction List">Transaction List</div>
               </a>
             </li>
           </ul>
