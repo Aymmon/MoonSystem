@@ -3,6 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Inventory;
+use App\Models\ProductSize;
+use App\Models\Uom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,9 +13,20 @@ class ProductController extends Controller
 {
     public function productList()
     {
+        $inventories = Inventory::all();
+        $uoms = Uom::all();
         $products = Product::with('category')->get(); // eager load category
         $categories = Category::all();
-        return view('inventory.product', compact('products', 'categories'));
+        return view('inventory.product', compact('products', 'categories','inventories', 'uoms'));
+    }
+
+    public function productAdd()
+    {
+        $inventories = Inventory::all();
+        $uoms = Uom::all();
+        $products = Product::with('category')->get(); // eager load category
+        $categories = Category::all();
+        return view('inventory.add-product', compact('products', 'categories','inventories', 'uoms'));
     }
 
     public function store(Request $request)
@@ -21,7 +35,10 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
+            'price' => 'nullable|numeric|min:0', // price is now optional if sizes are used
+            'picture' => 'nullable|image|max:2048',
+            'sizes.*.size' => 'nullable|string|max:50',
+            'sizes.*.price' => 'nullable|numeric|min:0',
         ]);
 
         $data = $request->only(['name', 'description', 'price', 'category_id']);
@@ -30,10 +47,25 @@ class ProductController extends Controller
             $data['picture'] = $request->file('picture')->store('products', 'public');
         }
 
-        Product::create($data);
+        $product = Product::create($data);
 
-        return redirect()->route('product.list')->with('success', 'Product created successfully.');
+        // Save sizes if available
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $size) {
+                if (!empty($size['size']) && !empty($size['price'])) {
+                    ProductSize::create([
+                        'product_id' => $product->id,
+                        'size' => $size['size'],
+                        'price' => $size['price'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('product.list')->with('success', 'Product created with sizes.');
     }
+
+
 
     public function update(Request $request, $id)
     {
@@ -69,4 +101,31 @@ class ProductController extends Controller
 
         return redirect()->back()->with('success', 'Product deleted successfully.');
     }
+
+    public function reduceInventory($productId, $quantityOrdered = 1)
+    {
+        $product = Product::with('ingredients.inventory', 'ingredients.uom')->findOrFail($productId);
+
+        foreach ($product->ingredients as $ingredient) {
+            $inventory = $ingredient->inventory;
+
+            if ($inventory->uom_id !== $ingredient->uom_id) {
+                // Add conversion logic here if needed
+            }
+
+            $totalUsed = $ingredient->quantity * $quantityOrdered;
+
+            if ($inventory->quantity < $totalUsed) {
+                return response()->json([
+                    'error' => "Not enough {$inventory->name} in stock"
+                ], 400);
+            }
+
+            $inventory->quantity -= $totalUsed;
+            $inventory->save();
+        }
+
+        return response()->json(['message' => 'Inventory updated successfully']);
+    }
+
 }

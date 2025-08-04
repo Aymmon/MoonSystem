@@ -61,7 +61,7 @@
                 <div class="mb-2">
                     <label class="form-label text-white">Quick Payment</label>
                     <div>
-                        @foreach ([50, 100, 200, 500, 1000, 5000] as $amount)
+                        @foreach ([50, 100, 200, 500, 1000] as $amount)
                         <button type="button" class="btn btn-outline-light btn-sm me-2 quick-pay-btn" data-amount="{{ $amount }}">
                             ₱{{ number_format($amount) }}
                         </button>

@@ -104,16 +104,16 @@
                     <div class="card-body">
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
-                          <span>Active Users</span>
+                          <span>7 Days Sales</span>
                           <div class="d-flex align-items-end mt-2">
-                            <h4 class="mb-0 me-2">19,860</h4>
-                            <small class="text-danger">(-14%)</small>
+                            <h4 class="mb-0 me-2">{{ number_format($weeklySalesTotal, 2) }}</h4>
+                            <small class="text-success">({{ $weeklyQuantitySold ?? 0 }} sold)</small>
                           </div>
-                          <p class="mb-0">Last week analytics</p>
+                          <p class="mb-0">1 week analytics</p>
                         </div>
                         <div class="avatar">
                           <span class="avatar-initial rounded bg-label-success">
-                            <i class="bx bx-group bx-sm"></i>
+                            <i class="bx bx-calendar bx-sm"></i>
                           </span>
                         </div>
                       </div>
@@ -125,16 +125,16 @@
                     <div class="card-body">
                       <div class="d-flex align-items-start justify-content-between">
                         <div class="content-left">
-                          <span>Pending Users</span>
+                          <span>1 Month Sales</span>
                           <div class="d-flex align-items-end mt-2">
-                            <h4 class="mb-0 me-2">237</h4>
-                            <small class="text-success">(+42%)</small>
+                            <h4 class="mb-0 me-2">{{ number_format($monthlySalesTotal, 2) }}</h4>
+                            <small class="text-success">({{ $monthlyQuantitySold ?? 0 }} sold)</small>
                           </div>
-                          <p class="mb-0">Last week analytics</p>
+                          <p class="mb-0">1 Month analytics</p>
                         </div>
                         <div class="avatar">
                           <span class="avatar-initial rounded bg-label-warning">
-                            <i class="bx bx-user-voice bx-sm"></i>
+                            <i class="bx bx-calendar bx-sm"></i>
                           </span>
                         </div>
                       </div>

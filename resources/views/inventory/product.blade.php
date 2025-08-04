@@ -33,7 +33,7 @@
           <div class="content-wrapper">
             <!-- Content -->
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="py-3 mb-4"><span class="text-muted fw-light">eCommerce /</span> Product List</h4>
+              <h4 class="py-3 mb-4"><span class="text-muted fw-light">Inventory /</span> Product List</h4>
 
               <!-- Product List Widget -->
               <div class="card mb-4">
@@ -119,9 +119,8 @@
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title m-0">Product List</h5>
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                            <i class="bx bx-plus"></i> Add Product
-                        </button>
+                        <a href="{{ route('product.add') }}"> <i class="bx bx-plus"></i> Add Product</a>
+
                         </div>
                     </div>
                     <div class="card-datatable table-responsive">
@@ -172,7 +171,7 @@
             <!-- / Content -->
             <!-- Add Product Modal -->
             <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <form method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-content">
@@ -210,6 +209,7 @@
                                 <label for="picture" class="form-label">Product Picture</label>
                                 <input type="file" name="picture" class="form-control" accept="image/*">
                             </div>
+                        <button type="button" id="add-ingredient-btn" class="btn btn-sm btn-secondary mb-3">+ Add Ingredient</button>
 
                         </div>
                         <div class="modal-footer">

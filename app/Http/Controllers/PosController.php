@@ -104,7 +104,6 @@ class PosController extends Controller
         $cart = session()->get('cart', []);
         return view('pos.partials.cart-sidebar', compact('cart'))->render();
     }
-
     public function checkout(Request $request)
     {
         $cart = Session::get('cart', []);
@@ -135,7 +134,7 @@ class PosController extends Controller
 
         $newNumber = $lastNumber + 1;
         $transactionNumber = 'TRN-' . str_pad($newNumber, 10, '0', STR_PAD_LEFT);
-        
+
         // Create transaction
         $transaction = PosTransaction::create([
             'transaction_number' => $transactionNumber,

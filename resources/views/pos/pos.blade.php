@@ -424,7 +424,6 @@ font-weight: 600;
     <div class="cart-sidebar col-3 overflow-auto d-flex flex-column justify-content-between" id="cart-sidebar">
         @include('pos.partials.cart-sidebar', ['cart' => $cart])
     </div>
-
   </div>
 </body>
 <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>

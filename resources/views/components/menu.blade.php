@@ -35,12 +35,25 @@
     </li>
 
     <!-- Inventory Menu -->
-    <li class="menu-item {{ request()->routeIs('product.list', 'categories.list', 'transactions.list') ? 'open' : '' }}">
+    <li class="menu-item {{ request()->routeIs('inventories.list', 'oums.list', 'product.list', 'categories.list', 'transactions.list') ? 'open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-cart-alt"></i>
         <div class="text-truncate" data-i18n="Inventory">Inventory</div>
       </a>
       <ul class="menu-sub">
+        <!-- Inventory List-->
+        <li class="menu-item {{ request()->routeIs('inventories.list') ? 'active' : '' }}">
+            <a href="{{ route('inventories.list') }}" class="menu-link">
+                <div class="text-truncate" data-i18n="Inventory List">Inventory List</div>
+            </a>
+        </li>
+        <!-- Oum List-->
+        <li class="menu-item {{ request()->routeIs('oums.list') ? 'active' : '' }}">
+            <a href="{{ route('oums.list') }}" class="menu-link">
+                <div class="text-truncate" data-i18n="Unit Of Measures List">Unit Of Measures List</div>
+            </a>
+        </li>
+
         <!-- Products -->
         <li class="menu-item {{ request()->routeIs('product.list', 'categories.list') ? 'open' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -59,7 +72,6 @@
             </li>
           </ul>
         </li>
-
         <!-- Transactions -->
         <li class="menu-item {{ request()->routeIs('transactions.list') ? 'open' : '' }}">
           <a href="javascript:void(0);" class="menu-link menu-toggle">
