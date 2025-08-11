@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Uom extends Model
 {
-    protected $fillable = ['name', 'abbreviation'];
+    protected $table = 'uoms';
 
-    public function inventories()
-    {
-        return $this->hasMany(Inventory::class);
-    }
+    protected $fillable = [
+        'name',
+        'symbol',
+        'base_conversion',
+        'base_unit',
+    ];
 }

@@ -20,10 +20,6 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    public function ingredients()
-    {
-        return $this->hasMany(ProductIngredient::class);
-    }
     public function sizes()
     {
         return $this->hasMany(ProductSize::class);

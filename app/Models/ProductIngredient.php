@@ -3,28 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductIngredient extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'product_id',
-        'inventory_id',
+        'inventory_item_id',
         'quantity',
         'unit',
     ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function inventory()
+    public function inventoryItem()
     {
-        return $this->belongsTo(Inventory::class);
+        return $this->belongsTo(InventoryItem::class);
     }
-
-    public function uom()
-    {
-        return $this->belongsTo(UOM::class);
-    }
-
 }

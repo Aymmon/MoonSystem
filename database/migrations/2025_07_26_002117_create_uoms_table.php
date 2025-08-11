@@ -9,8 +9,10 @@ return new class extends Migration {
     {
         Schema::create('uoms', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // e.g., "Piece"
-            $table->string('abbreviation'); // e.g., "pcs"
+            $table->string('name'); // e.g. "Kilogram"
+            $table->string('symbol'); // e.g. "kg"
+            $table->unsignedInteger('base_conversion');
+            $table->string('base_unit'); // e.g. "g" (gram)
             $table->timestamps();
         });
     }

@@ -13,15 +13,10 @@ return new class extends Migration
     {
         Schema::create('product_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('inventory_id'); // e.g., sugar
-            $table->decimal('quantity', 10, 2); // e.g., 2.00
-            $table->unsignedBigInteger('uom_id'); // e.g., tbsp (required to convert if diff)
-
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('cascade');
-            $table->foreign('uom_id')->references('id')->on('uoms')->onDelete('cascade');
-
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('inventory_item_id')->constrained()->onDelete('cascade');
+            $table->decimal('quantity', 10, 2); // how much of the ingredient is needed
+            $table->string('unit'); // e.g., ml, grams — must match inventory_item.unit ideally
             $table->timestamps();
         });
     }

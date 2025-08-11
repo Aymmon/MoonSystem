@@ -275,55 +275,39 @@
                 }
             });
 
+
             $(document).on('click', '#print-receipt-btn', function () {
-                var receiptContent = $('.modal-body.receipt-style').html();
+                // Get the receipt content HTML
+                var receiptContent = document.getElementById('receipt-content').innerHTML;
 
+                // Get the <style> block from the modal (if any)
+                var styleBlock = '';
+                var styleTags = document.querySelectorAll('#receipt-content style, style');
+                styleTags.forEach(function(style) {
+                    styleBlock += style.outerHTML;
+                });
+
+                // Open a new window for printing
                 var printWindow = window.open('', '', 'height=600,width=400');
-
                 printWindow.document.write(`
-                <html>
-                    <head>
-                    <title>Print Receipt</title>
-                    <style>
-                        body {
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        font-size: 14px;
-                        padding: 20px;
-                        }
-                        table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        margin-top: 1rem;
-                        }
-                        th, td {
-                        border: 1px solid #333;
-                        padding: 8px;
-                        text-align: left;
-                        }
-                        th {
-                        background-color: #f0f0f0;
-                        }
-                        .text-end {
-                        text-align: right;
-                        }
-                        h4, strong {
-                        margin: 0;
-                        }
-                        hr {
-                        margin: 15px 0;
-                        }
-                    </style>
-                    </head>
-                    <body>
-                    ${receiptContent}
-                    </body>
-                </html>
+                    <html>
+                        <head>
+                            <title>Print Receipt</title>
+                            ${styleBlock}
+                        </head>
+                        <body>
+                            <div class="receipt-style" style="width:58mm;">
+                                ${receiptContent}
+                            </div>
+                        </body>
+                    </html>
                 `);
-
                 printWindow.document.close();
                 printWindow.focus();
-                printWindow.print();
-                printWindow.close();
+                setTimeout(function() {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
             });
 
         });

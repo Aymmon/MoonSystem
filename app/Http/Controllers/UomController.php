@@ -16,33 +16,41 @@ class UomController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'abbreviation' => 'required|string|max:10',
+            'name' => 'required|string',
+            'symbol' => 'required|string|max:10',
+            'base_unit' => 'required|string',
+            'base_conversion' => 'required|numeric|min:0',
         ]);
 
-        Uom::create($request->only('name', 'abbreviation'));
+        Uom::create($request->all());
 
-        return redirect()->route('oums.list')->with('success', 'UOM added successfully.');
+        return back()->with('success', 'UOM created successfully.');
+    }
+
+    public function edit($id)
+    {
+        return Uom::findOrFail($id);
     }
 
     public function update(Request $request, $id)
     {
+        $uom = Uom::findOrFail($id);
+
         $request->validate([
-            'name' => 'required|string|max:255',
-            'abbreviation' => 'required|string|max:10',
+            'name' => 'required|string',
+            'symbol' => 'required|string|max:10',
+            'base_unit' => 'required|string',
+            'base_conversion' => 'required|numeric|min:0',
         ]);
 
-        $uom = Uom::findOrFail($id);
-        $uom->update($request->only('name', 'abbreviation'));
+        $uom->update($request->all());
 
-        return redirect()->route('oums.list')->with('success', 'UOM updated successfully.');
+        return back()->with('success', 'UOM updated successfully.');
     }
 
     public function destroy($id)
     {
-        $uom = Uom::findOrFail($id);
-        $uom->delete();
-
-        return redirect()->route('oums.list')->with('success', 'UOM deleted successfully.');
+        Uom::findOrFail($id)->delete();
+        return back()->with('success', 'UOM deleted successfully.');
     }
 }

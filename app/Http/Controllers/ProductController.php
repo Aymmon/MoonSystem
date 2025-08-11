@@ -13,20 +13,19 @@ class ProductController extends Controller
 {
     public function productList()
     {
-        $inventories = Inventory::all();
         $uoms = Uom::all();
         $products = Product::with('category')->get(); // eager load category
         $categories = Category::all();
-        return view('inventory.product', compact('products', 'categories','inventories', 'uoms'));
+        return view('inventory.product', compact('products', 'categories', 'uoms'));
     }
 
     public function productAdd()
     {
-        $inventories = Inventory::all();
+
         $uoms = Uom::all();
         $products = Product::with('category')->get(); // eager load category
         $categories = Category::all();
-        return view('inventory.add-product', compact('products', 'categories','inventories', 'uoms'));
+        return view('inventory.add-product', compact('products', 'categories', 'uoms'));
     }
 
     public function store(Request $request)

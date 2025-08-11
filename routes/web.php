@@ -19,7 +19,6 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 Route::get('/users/{user}', [UserController::class, 'profile'])->name('user.profile');
-
 Route::get('/profile', [UserController::class, 'profile'])->middleware('auth');
 
 use App\Http\Controllers\ProductController;
@@ -34,7 +33,6 @@ use App\Http\Controllers\ProductSizeController;
 Route::post('/product-sizes', [ProductSizeController::class, 'store'])->name('product-sizes.store');
 Route::put('/product-sizes/{id}', [ProductSizeController::class, 'update'])->name('product-sizes.update');
 Route::delete('/product-sizes/{id}', [ProductSizeController::class, 'destroy'])->name('product-sizes.destroy');
-
 
 use App\Http\Controllers\PosController;
 Route::get('/pos', [PosController::class, 'posList'])->name('pos.list');
@@ -62,13 +60,23 @@ Route::put('/categories/{category}', [CategoryController::class, 'update'])->nam
 Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 use App\Http\Controllers\UomController;
-Route::get('/oums/list', [UomController::class, 'index'])->name('oums.list');
-Route::post('/oums', [UomController::class, 'store'])->name('oums.store');
-Route::put('/oums/{id}', [UomController::class, 'update'])->name('oums.update');
-Route::delete('/oums/{id}', [UomController::class, 'destroy'])->name('oums.destroy');
+Route::get('/uoms', [UomController::class, 'index'])->name('uoms.index');
+Route::get('/uoms/{id}', [UomController::class, 'show'])->name('uoms.show');
+Route::post('/uoms', [UomController::class, 'store'])->name('uoms.store');
+Route::put('/uoms/{id}', [UomController::class, 'update'])->name('uoms.update');
+Route::delete('/uoms/{id}', [UomController::class, 'destroy'])->name('uoms.destroy');
 
-use App\Http\Controllers\InventoryController;
-Route::get('/inventories/list', [InventoryController::class, 'index'])->name('inventories.list');
-Route::post('/inventories', [InventoryController::class, 'store'])->name('inventories.store');
-Route::put('/inventories/{id}', [InventoryController::class, 'update'])->name('inventories.update');
-Route::delete('/inventories/{id}', [InventoryController::class, 'destroy'])->name('inventories.destroy');
+
+use App\Http\Controllers\InventoryItemController;
+// Inventory List
+Route::get('/inventory', [InventoryItemController::class, 'index'])->name('inventory.index');
+// Create Form
+Route::get('/inventory/create', [InventoryItemController::class, 'create'])->name('inventory.create');
+// Store Ingredient
+Route::post('/inventory', [InventoryItemController::class, 'store'])->name('inventory.store');
+// Edit Form
+Route::get('/inventory/{inventory}/edit', [InventoryItemController::class, 'edit'])->name('inventory.edit');
+// Update Ingredient
+Route::put('/inventory/{inventory}', [InventoryItemController::class, 'update'])->name('inventory.update');
+// Delete Ingredient
+Route::delete('/inventory/{inventory}', [InventoryItemController::class, 'destroy'])->name('inventory.destroy');

@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         // ✅ This line executes the UserSeeder
         $this->call([
             UserSeeder::class,
+            UomSeeder::class,
         ]);
     }
 }
